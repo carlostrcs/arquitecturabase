@@ -3,13 +3,17 @@ function ClienteRest(){
     this.agregarUsuario=function(email){
     var cli=this;
     $.getJSON("/agregarUsuario/"+email,function(data){
+    let msg="El email "+email+" está ocupado";
     if (data.email!=-1){
     console.log("Usuario "+email+" ha sido registrado")
+    msg="Bienvenido al sistema, " + email;
+    $.cookie("email",email);
     }
     else{
     console.log("El email ya está ocupado");
     }
-    })
+    cw.mostrarMensaje(msg);
+    });
     }
 
     this.agregarUsuario2=function(email){
@@ -63,4 +67,32 @@ function ClienteRest(){
         var cli = this;
         $.getJSON("/eliminarUsuario/" + email, )
     }
+
+    this.registrarUsuario = function(email, password) {
+      $.ajax({
+          type: 'POST',
+          url: '/registrarUsuario',
+          data: JSON.stringify({"email": email, "password": password}),
+          success: function(data) {
+              if (data.email !== -1) {
+                  console.log("Usuario " + data.email + " ha sido registrado");
+                  $.cookie("email", data.email);
+                  cw.limpiar();
+                  cw.mostrarMensaje("Bienvenido al sistema, " + data.email);
+                  //cw.mostrarLogin();
+              } else {
+                  console.log("El email está ocupado");
+              }
+          },
+          error: function(xhr, textStatus, errorThrown) {
+              console.log("Status: " + textStatus);
+              console.log("Error: " + errorThrown);
+          },
+          contentType: 'application/json'
+      });
+  };
+  
+
+
+    
 }

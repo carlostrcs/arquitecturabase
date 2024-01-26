@@ -3,9 +3,11 @@
 <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js" integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js" integrity="sha512-aUhL2xOCrpLEuGD5f6tgHbLYEXRpYZ8G5yD+WlFrXrPy2IrWBlu6bih5C9H6qGsgqnU6mgx6KtU8TreHpASprw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src="https://accounts.google.com/gsi/client" async defer></script>
  <script src="./cliente/clienteRest.js"></script>
  <script src="./cliente/controlWeb.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js" integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
@@ -41,16 +43,27 @@
         </li>
         </ul>
        </nav>
-       <div class="container-fluid">
-        <h3>Arquitectura Base</h3>
-       <div id="au"></div>
-       </div>
+       
+       <div class="container">
+            <h3>Arquitectura Base</h3>
+            <div id="au"></div>
+            <div id="registro"></div>
+            <div id="msg"></div>
+        </div>
+
+       <div
+            id="g_id_onload"
+            data-client_id="438500343404-g4k6n1a2ee6q9k8qsst998ptbkthrk51.apps.googleusercontent.com"
+            data-login_uri=http://localhost:3000/oneTap/callback
+            data-skip_prompt_cookie="email"
+            ></div>
+
 
        
     <script>
         // Asigna una función al evento onload de window
         window.onload = function() {
-            cw.mostrarAgregarUsuario();
+            cw.comprobarSesion();
         };
     </script>
 </body>
