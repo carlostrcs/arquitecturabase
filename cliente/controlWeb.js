@@ -96,6 +96,7 @@ function ControlWeb(){
 
     this.salir=function(){
         $.removeCookie("email");
+        rest.salir();
         // location.reload();
     }
 

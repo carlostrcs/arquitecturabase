@@ -124,6 +124,11 @@ function ClienteRest(){
         console.log("eliminarCuenta clienteRest");
         $.getJSON("/eliminarCuenta/" + email);
     }
+
+    this.salir=function(){
+      console.log("salir clienteRest");
+      $.getJSON("/salir");
+    }
         
   
 

@@ -153,13 +153,20 @@
     app.get("/eliminarCuenta/:email",haIniciado,function(request,response){
         let email=request.params.email;
         console.log(request.user);
-        // request.logout();
-        // response.redirect("/");
         if (email){
             sistema.eliminarCuenta(email,function(res){
+                request.logout();
                 response.send(res);
             });
         }
+        
+        // response.redirect("/");
+        
+    });
+
+    app.post("/salir",haIniciado,function(request,response){
+        console.log("REQUEST LOGOUT");
+        request.logout();
     });
         
 
