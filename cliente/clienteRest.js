@@ -120,9 +120,9 @@ function ClienteRest(){
           });
     }
 
-    this.eliminarCuenta=function(){
+    this.eliminarCuenta=function(email){
         console.log("eliminarCuenta clienteRest");
-        $.getJSON("/eliminarCuenta");
+        $.getJSON("/eliminarCuenta/" + email);
     }
         
   

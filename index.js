@@ -150,8 +150,9 @@
         });
     });
 
-    app.get("/eliminarCuenta",function(request,response){
-        let email=request.user.email;
+    app.get("/eliminarCuenta/:email",haIniciado,function(request,response){
+        let email=request.params.email;
+        console.log(request.user);
         // request.logout();
         // response.redirect("/");
         if (email){

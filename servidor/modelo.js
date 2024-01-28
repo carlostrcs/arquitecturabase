@@ -3,6 +3,9 @@ const correo=require("./email.js");
 const bcrypt = require("bcrypt");
 
 function Sistema(){
+    correo.conectar(function(res){
+        console.log("Conectado a nodemailer");
+    });
     this.cad=new datos.CAD();
     this.cad.conectar(function(db){
         console.log("Conectado a Mongo Atlas");
@@ -127,7 +130,7 @@ function Sistema(){
         });
       }
     
-
+      
     
 
     

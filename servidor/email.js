@@ -1,18 +1,30 @@
 const nodemailer = require('nodemailer');
 const url = "http://localhost:3000/"; // Cambia esta URL a la de tu despliegue
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  service: 'gmail',
-  auth: {
-    user: 'alguienanonimo2000@gmail.com',
-    pass: 'fzwg uoms hwxt uapk'
-  },
-  tls:{rejectUnauthorized:false}
-});
+const gv = require('./gestorVariables.js');
+
+let options = {
+    user: undefined,
+    pass: undefined
+}
+
+module.exports.conectar=function(callback){
+    gv.obtenerOptionsEmail(function(res){
+        options=res;
+        callback(res);
+    });
+}
+  
 
 module.exports.enviarEmail = async function(direccion, key, men) {
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    service: 'gmail',
+    auth: options,
+    tls:{rejectUnauthorized:false}
+  });
+  
   console.log("Direccion de corrreo: " + direccion)
   const result = await transporter.sendMail({
     from: 'alguienanonimo2000@gmail.com',

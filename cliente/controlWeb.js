@@ -116,7 +116,7 @@ function ControlWeb(){
             $.removeCookie("email");
             location.reload();
             console.log("eliminarCuenta controlWeb");  
-            rest.eliminarCuenta(); 
+            rest.eliminarCuenta(email); 
         } 
     }
 
