@@ -4,8 +4,19 @@
     const app = express();
     const passport=require("passport");
     const cookieSession=require("cookie-session");
+    const LocalStrategy = require('passport-local').Strategy;
     require("./servidor/passport-setup.js");
+    const bcrypt = require("bcrypt");
     const modelo = require("./servidor/modelo.js");
+    const haIniciado=function(request,response,next){
+        if (request.user){
+        next();
+        }
+        else{
+        response.redirect("/")
+        }
+    };
+
     const PORT = process.env.PORT || 3000;
     const bodyParser=require("body-parser");
     app.use(express.static(__dirname + "/"));
@@ -18,6 +29,15 @@
         keys: ['key1', 'key2']
     }));
     app.use(passport.initialize());
+
+    passport.use(new LocalStrategy({ usernameField: "email", passwordField: "password" },
+        function (email, password, done) {
+            sistema.loginUsuario({ "email": email, "password": password }, function (user) {
+                return done(null, user);
+            });
+        }
+    ));
+
     app.use(passport.session());
     
     let sistema = new modelo.Sistema();
@@ -38,7 +58,7 @@
         response.send(res);
     });
 
-    app.get("/obtenerUsuarios",function(request,response){
+    app.get("/obtenerUsuarios",haIniciado,function(request,response){
         let res=sistema.obtenerUsuarios();
         response.send(res);
     });
@@ -54,7 +74,7 @@
         response.send(res);
     });
 
-    app.get("/eliminarUsuario/:email",function(request,response){
+    app.get("/eliminarUsuario/:email",haIniciado,function(request,response){
         let email=request.params.email;
         let res=sistema.eliminarUsuario(email);
         response.send(res);
@@ -106,4 +126,42 @@
             response.send({"email":res.email});
         });
     });
+
+    // app.post("/loginUsuario",function(request,response){
+    //     sistema.loginUsuario(request.body,function(res){
+    //         response.send({"email":res.email});
+    //     });
+    // });
+
+    app.post('/loginUsuario',passport.authenticate("local",{failureRedirect:"/fallo",successRedirect: "/ok"}));
+
+    app.get("/ok",function(request,response){
+        response.send({email:request.user.email})
+    });
+
+    app.get("/confirmarUsuario/:email/:key",function(request,response){
+        let email=request.params.email;
+        let key=request.params.key;
+        sistema.confirmarUsuario({"email":email,"key":key},function(usr){
+            if (usr.email!=-1){
+                response.cookie('email',usr.email);
+            }
+            response.redirect('/');
+        });
+    });
+
+    app.get("/eliminarCuenta",function(request,response){
+        let email=request.user.email;
+        // request.logout();
+        // response.redirect("/");
+        if (email){
+            sistema.eliminarCuenta(email,function(res){
+                response.send(res);
+            });
+        }
+    });
+        
+
+    
+        
         

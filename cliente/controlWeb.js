@@ -27,18 +27,53 @@ function ControlWeb(){
     }
 
     this.mostrarRegistro=function(){
-        $("#fmRegistro").remove();
-        $("#registro").load("./cliente/registro.html",function(){
-            $("#btnRegistro").on("click",function(e){
-                e.preventDefault();
-                let email=$("#email").val();
-                let pwd=$("#pwd").val();
-                if (email && pwd){
-                    //rest.registrarUsuario(nick);
-                    console.log(email+" "+pwd);
-                }
+        // $("#fmRegistro").remove();
+        let email=$.cookie("email");
+        if (!email){
+            this.limpiar();
+            $("#registro").load("./cliente/registro.html",function(){
+                $("#btnRegistro").on("click",function(e){
+                    e.preventDefault();
+                    let email=$("#email").val();
+                    let pwd=$("#pwd").val();
+                    let name = $("#name").val();
+                    let surname = $("#surname").val();
+                    if (email && pwd){
+                        rest.registrarUsuario(email,pwd,name,surname);
+                        this.mostrarLogin();
+                        console.log(email+" "+pwd);
+                    }
+                });
             });
-        });
+        }
+    }
+
+    this.mostrarLogin=function(){
+        // $("#fmRegistro").remove();
+        let email=$.cookie("email");
+        if (!email){
+            this.limpiar();
+            $("#login").load("./cliente/login.html",function(){
+                $("#btnLogin").on("click",function(e){
+                    e.preventDefault();
+                    let email=$("#email").val();
+                    let pwd=$("#pwd").val();
+                    if (email && pwd){
+                        rest.iniciarSesionUsuario(email,pwd);
+                        console.log("login "+email+" "+pwd);
+                    }
+                });
+            });
+        }
+    }
+
+
+    this.mostrarSalir=function(){
+        let email=$.cookie("email");
+        if (email){
+        this.salir();
+        this.mostrarLogin();
+        }
     }
         
 
@@ -61,6 +96,28 @@ function ControlWeb(){
 
     this.salir=function(){
         $.removeCookie("email");
-        location.reload();
-        }
+        // location.reload();
+    }
+
+    this.limpiar=function(){
+        $("#au").empty();
+        $("#ou").empty();
+        $("#nu").empty();
+        $("#ua").empty();
+        $("#eu").empty();
+        $("#fmLogin").remove();
+        $("#fmRegistro").remove();
+        $('#mMsg').remove();
+    }
+
+    this.eliminarCuenta = function(){
+        let email = $.cookie("email");
+        if(email){
+            $.removeCookie("email");
+            location.reload();
+            console.log("eliminarCuenta controlWeb");  
+            rest.eliminarCuenta(); 
+        } 
+    }
+
 }

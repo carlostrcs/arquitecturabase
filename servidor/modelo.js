@@ -1,4 +1,6 @@
 const datos=require("./cad.js");
+const correo=require("./email.js");
+const bcrypt = require("bcrypt");
 
 function Sistema(){
     this.cad=new datos.CAD();
@@ -33,8 +35,9 @@ function Sistema(){
     }
 
     this.eliminarUsuario=function(email){
-        if(this.usuarios[email])
+        if(this.usuarios[email]){
             delete(this.usuarios[email]);
+        }
     }
 
     this.numeroUsuarios=function(){
@@ -52,10 +55,40 @@ function Sistema(){
         if (!obj.nick){
         obj.nick=obj.email;
         }
-        this.cad.buscarUsuario(obj,function(usr){
+        this.cad.buscarUsuario({email: obj.email},function(usr){
             if (!usr){
-                modelo.cad.insertarUsuario(obj,function(res){
-                    callback(res);
+                obj.key=Date.now().toString();
+                obj.confirmada=false;
+                bcrypt.hash(obj.password, 10, function (err, hash) {
+                    obj.password = hash;
+                    modelo.cad.insertarUsuario(obj,function(res){
+                        callback(res);
+                    });
+                });
+                correo.enviarEmail(obj.email,obj.key,"Confirmar cuenta");
+            }
+            else
+            {
+                callback({"email":-1});
+            }
+        });
+    }
+
+    this.loginUsuario=function(obj,callback){
+        let modelo=this;
+        this.cad.buscarUsuario({"email": obj.email, "confirmada": true},function(usr){
+            if (usr && usr.password){
+                bcrypt.compare(obj.password,usr.password, function(err,result){
+                    if(err){
+                        console.error("Error al comparar contraseñas:", err);
+                        callback({ email: -1, err: "Error al comparar contraseñas"});
+                    }else if (result){
+                        callback(usr);
+                    } else {
+                        callback({ email: -1, err: "Usuario o contraseña incorrecta"}); // Contraseña incorrecta
+                        console.error({ email: -1, err: "Usuario o contraseña incorrecta"});
+                        console.error({result});
+                      }
                 });
             }
             else
@@ -64,7 +97,40 @@ function Sistema(){
             }
         });
     }
-        
+
+    this.confirmarUsuario = function(obj, callback) {
+        let modelo = this;
+        this.cad.buscarUsuario({"email": obj.email, "confirmada": false, "key": obj.key}, function(usr) {
+            if (usr) {
+                usr.confirmada = true;
+                modelo.cad.actualizarUsuario(usr, function(res) {
+                    callback({"email": res.email}); // callback(res)
+                });
+            } else {
+                callback({"email": -1});
+            }
+        });
+    }
+
+    this.eliminarCuenta=function(email,callback){
+        // let {cad} = this;
+        let modelo = this;
+        this.cad.buscarUsuario({email:email},function(usr){
+          if(!usr){
+            callback({email:-1}) 
+          }
+          else{
+            modelo.cad.eliminarCuenta(usr,function(ok){
+              callback({email:1,msg:`Se ha eliminado al usuario ${usr.email}`})
+            });
+          }
+        });
+      }
+    
+
+    
+
+    
         
 
    }

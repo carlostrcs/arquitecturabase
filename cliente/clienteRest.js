@@ -68,19 +68,20 @@ function ClienteRest(){
         $.getJSON("/eliminarUsuario/" + email, )
     }
 
-    this.registrarUsuario = function(email, password) {
+    this.registrarUsuario = function(email, password, name, surname) {
       $.ajax({
           type: 'POST',
           url: '/registrarUsuario',
-          data: JSON.stringify({"email": email, "password": password}),
+          data: JSON.stringify({"email": email, "password": password, "name": name, "surname": surname}),
           success: function(data) {
               if (data.email !== -1) {
                   console.log("Usuario " + data.email + " ha sido registrado");
-                  $.cookie("email", data.email);
+                //   $.cookie("email", data.email);
                   cw.limpiar();
-                  cw.mostrarMensaje("Bienvenido al sistema, " + data.email);
-                  //cw.mostrarLogin();
+                //   cw.mostrarMensaje("Bienvenido al sistema, " + data.email);
+                  cw.mostrarLogin();
               } else {
+                  alert("El email está ocupado!");
                   console.log("El email está ocupado");
               }
           },
@@ -90,7 +91,40 @@ function ClienteRest(){
           },
           contentType: 'application/json'
       });
-  };
+    }
+
+    this.iniciarSesionUsuario=function(email,password){
+        $.ajax({
+            type: "POST",
+            url: "/loginUsuario",
+            data: JSON.stringify({ email: email, password: password }),
+            success: function (data) {
+              if (data.email != -1) {
+                console.log("Usuario " + data.email + " ha sido loggeado");
+                $.cookie("email", data.email);
+                cw.limpiar();
+                cw.mostrarMensaje("Bienvenido al sistema, " + data.email);
+              //   cw.limpiar();
+               
+              } else {
+                console.log("No se puede iniciar sesión");
+                alert("Usuario y contraseña incorrectos o cuenta sin confirmar, inténtalo de nuevo");
+              //   cw.limpiar();
+              }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+              console.log("Status: " + textStatus);
+              console.log("Error: " + errorThrown);
+            },
+            contentType: "application/json",
+          });
+    }
+
+    this.eliminarCuenta=function(){
+        console.log("eliminarCuenta clienteRest");
+        $.getJSON("/eliminarCuenta");
+    }
+        
   
 
 
