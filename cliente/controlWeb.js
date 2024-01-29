@@ -50,6 +50,7 @@ function ControlWeb(){
 
     this.mostrarLogin=function(){
         // $("#fmRegistro").remove();
+        console.log("Mostrar login");
         let email=$.cookie("email");
         if (!email){
             this.limpiar();

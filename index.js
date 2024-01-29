@@ -164,9 +164,10 @@
         
     });
 
-    app.post("/salir",haIniciado,function(request,response){
+    app.get("/salir",haIniciado,function(request,response){
         console.log("REQUEST LOGOUT");
         request.logout();
+        response.send();
     });
         
 
