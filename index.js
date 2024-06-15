@@ -1,6 +1,7 @@
     // https://arquitecturabase-f3atvethyq-ew.a.run.app/
     const fs=require("fs");
     const express = require('express');
+    const cors = require('cors');
     const app = express();
     const passport=require("passport");
     const cookieSession=require("cookie-session");
@@ -23,6 +24,7 @@
 
     app.use(bodyParser.urlencoded({extended:true}));
     app.use(bodyParser.json());
+    app.use(cors());
     
     app.use(cookieSession({
         name: 'Sistema',
@@ -59,6 +61,7 @@
     });
 
     app.get("/obtenerUsuarios",haIniciado,function(request,response){
+        console.log('OBTENER USUARIOS')
         let res=sistema.obtenerUsuarios();
         response.send(res);
     });
@@ -167,7 +170,8 @@
     app.get("/salir",haIniciado,function(request,response){
         console.log("REQUEST LOGOUT");
         request.logout();
-        response.send();
+        // response.send();
+        response.type('json').json({ message: 'Logout exitoso' });
     });
         
 

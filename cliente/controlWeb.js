@@ -40,7 +40,7 @@ function ControlWeb(){
                     let surname = $("#surname").val();
                     if (email && pwd){
                         rest.registrarUsuario(email,pwd,name,surname);
-                        this.mostrarLogin();
+                        //this.mostrarLogin();
                         console.log(email+" "+pwd);
                     }
                 });
@@ -108,7 +108,9 @@ function ControlWeb(){
         $("#ua").empty();
         $("#eu").empty();
         $("#fmLogin").remove();
+        $("#pageLogin").remove();
         $("#fmRegistro").remove();
+        $("#pageRegistro").remove();
         $('#mMsg').remove();
     }
 
