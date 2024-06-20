@@ -93,6 +93,7 @@ function ControlWeb(){
         $('#mMsg').remove()
         let cadena ='<h2 id="mMsg">'+msg+'</h2>';
         $('#msg').append(cadena);
+        $("#homeContent").load("./cliente/carousel.html")
     }
 
     this.salir=function(){
@@ -112,6 +113,7 @@ function ControlWeb(){
         $("#fmRegistro").remove();
         $("#pageRegistro").remove();
         $('#mMsg').remove();
+        $('#homeContent').empty();
     }
 
     this.eliminarCuenta = function(){
