@@ -91,9 +91,13 @@ function ControlWeb(){
 
     this.mostrarMensaje=(msg)=>{
         $('#mMsg').remove()
+        $('#mostrarPlantillasEntrenamiento').remove()
+        $('#plantillasEntrenamiento').empty()
         let cadena ='<h2 id="mMsg">'+msg+'</h2>';
         $('#msg').append(cadena);
         $("#homeContent").load("./cliente/carousel.html")
+        let navBarItem = '<li class="nav-item" id="mostrarPlantillasEntrenamiento"><a class="nav-link" href="#" onclick="cw.mostrarPlantillasEntrenamiento()">Mostrar Plantillas</a></li>';
+        $("#navBar").append(navBarItem);
     }
 
     this.salir=function(){
@@ -114,6 +118,8 @@ function ControlWeb(){
         $("#pageRegistro").remove();
         $('#mMsg').remove();
         $('#homeContent').empty();
+        $('#mostrarPlantillasEntrenamiento').remove();
+        $('#plantillasEntrenamiento').empty();
     }
 
     this.eliminarCuenta = function(){
@@ -124,6 +130,27 @@ function ControlWeb(){
             console.log("eliminarCuenta controlWeb");  
             rest.eliminarCuenta(email); 
         } 
+    }
+
+    this.mostrarPlantillasEntrenamiento=function(){
+        // $("#fmRegistro").remove();
+        console.log("Mostrar Plantillas Entrenamiento");
+        $("#au").empty();
+        $("#ou").empty();
+        $("#nu").empty();
+        $("#ua").empty();
+        $("#eu").empty();
+        $("#fmLogin").remove();
+        $("#pageLogin").remove();
+        $("#fmRegistro").remove();
+        $("#pageRegistro").remove();
+        $('#mMsg').remove();
+        $('#homeContent').empty();
+        $("#plantillasEntrenamiento").load("./cliente/plantillasEntrenamiento.html")
+    }
+    
+    this.mostrarHome = function(){
+        this.comprobarSesion()
     }
 
 }
