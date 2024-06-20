@@ -14,8 +14,8 @@ passport.use(new GoogleStrategy({
  clientID: "438500343404-1h3aa2up8pv81602kgbm9qo9ld34ri0f.apps.googleusercontent.com",
  clientSecret: "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",
  //CAMBIAR DIRECCIÓN DEPENDIENDO DE SI ESTÁ CORRIENDO LOCALHOST O GOOGLE CLOUD
- //callbackURL: "https://arquitecturabase-f3atvethyq-no.a.run.app/google/callback" 
- callbackURL: "http://localhost:3000/google/callback"
+ callbackURL: "https://arquitecturabase-f3atvethyq-ew.a.run.app/google/callback" 
+ //callbackURL: "http://localhost:3000/google/callback"
  },
  function(accessToken, refreshToken, profile, done) {
  return done(null, profile);
